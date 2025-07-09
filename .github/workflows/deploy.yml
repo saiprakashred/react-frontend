@@ -20,8 +20,10 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_KEY }}
           script: |
-            cd ~/react-frontend
-            git pull origin main || git clone https://github.com/saiprakashred/react-frontend.git .
+                     script: |
+            cd ~/react-frontend/sample
+            git pull origin main
             npm install
             npm run build
             sudo cp -r build/* /usr/share/nginx/html/
+
