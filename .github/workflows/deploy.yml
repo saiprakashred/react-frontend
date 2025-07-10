@@ -10,9 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
       - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@v1
         with:
@@ -20,8 +17,22 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_KEY }}
           script: |
-            cd ~/react-frontend/sample
-            git pull origin main || git clone https://github.com/saiprakashred/react-frontend.git .
+            # Navigate to frontend directory
+            cd ~/react-frontend || git clone https://github.com/saiprakashred/react-frontend.git ~/react-frontend && cd ~/react-frontend
+            
+            # Make sure repo is up-to-date, clean any changes
+            git fetch origin
+            git reset --hard origin/main
+            git clean -fd
+            
+            # Install/update dependencies
             npm install
+            
+            # Build the React app
             npm run build
+            
+            # Copy build files to nginx serving folder
             sudo cp -r build/* /usr/share/nginx/html/
+            
+            echo "Frontend deployed successfully"
+
