@@ -8,7 +8,7 @@ function App() {
   const [users, setUsers] = useState([]);
 
   const fetchUsers = () => {
-    fetch('http://localhost:8080/api/users') // Spring Boot API
+    fetch("/api/users") // SpringBoot 
       .then(res => res.json())
       .then(data => setUsers(data))
       .catch(err => console.error('Error:', err));
